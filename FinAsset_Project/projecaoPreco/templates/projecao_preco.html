@@ -1,0 +1,126 @@
+{%extends "base.html" %}
+
+{%block contents%}
+
+<div class="alert alert-primary" role="alert">
+    Atenção: Alguns tickers podem não estar presentes nos resultados. Isso pode ocorrer se o ticker não existir, ou se as fontes externas de onde os dados são obtidos não possuírem informações sobre ele. Recomendamos verificar a existência do ticker e a disponibilidade de dados antes de realizar a consulta.
+</div>
+
+<br>
+
+
+
+<form method="post" id="myForm">
+    {% csrf_token %}
+
+
+    <div class="container">
+        <div class="row">      
+            <div class="col-auto">   
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Tickers</span>
+                    {{ form.ticker }}
+                </div>
+            </div>
+        </div> <div class="row">   
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Processar!</button>
+            </div>
+        </div>              
+    </div>
+</form>
+
+
+<button type="submit" class="btn btn-lg btn-danger" data-bs-toggle="popover" data-bs-title="Instruções" data-bs-content="Insira os tickers separados por linhas e clique em processar.">
+    Ajuda?
+</button>
+
+<div class="container text-center">
+    <div id="spinner" style="display: none;">
+        <strong role="status">Processando, Por Favor Espere!</strong>
+        <div class="spinner-border ms-auto" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+</div>
+
+
+<!------------------------------------------------------------->
+<!------------------------------------------------------------->
+<!------------------------------------------------------------->
+
+{% if results %}
+
+
+{%for ativo in results %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-1 border-bottom"></div>
+
+<div class="container text-center mb-4"> 
+    <h3>{{ ativo.0.ativo }} Projeções - Preço Fechamento: R$ {{ ativo.0.fechamento }} </h3>
+</div>
+
+<br><br>
+
+<div class="container mb-4"> 
+    <div class="row">
+        {% for i in ativo %}
+            <div class="col">
+                {% if forloop.revcounter == 2 %}
+                    <h4>Projeção até final do ano</h4>
+                {% elif forloop.revcounter == 1 %}
+                    <h4>Projeção para os próximos 5 anos</h4>
+                {% else %}
+                    <h4>Projeção para os próximos {{ i.dias }} dias</h4>
+                {% endif %}
+
+                <div class="card text-bg-success mb-3" style="max-width: 18rem;">
+                    <div class="card-header">Otimista</div>
+                    <div class="card-body">
+                        <p class="card-text">R$ {{ i.projecoes.otimista.valor }} ({{ i.projecoes.otimista.percentual }}%)</p>
+                    </div>
+                </div>
+
+                <div class="card text-bg-light mb-3" style="max-width: 18rem;">
+                    <div class="card-header">Projetado</div>
+                    <div class="card-body">
+                        <p class="card-text">R$ {{ i.projecoes.projetado.valor }} ({{ i.projecoes.projetado.percentual }}%)</p>
+                    </div>
+                </div>
+
+                <div class="card text-bg-danger mb-3" style="max-width: 18rem;">
+                    <div class="card-header">Pessimista</div>
+                    <div class="card-body">
+                        <p class="card-text">R$ {{ i.projecoes.pessimista.valor }} ({{ i.projecoes.pessimista.percentual }}%)</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<br>
+
+{%endfor%}
+
+
+{%endif%}
+
+{%endblock%}
+
+{%block scripts%}
+<script>
+    document.getElementById('myForm').addEventListener('submit', function() {
+        document.getElementById('spinner').style.display = 'block';
+    });
+</script>
+
+
+<script>
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+    })
+</script>
+
+
+{%endblock%}

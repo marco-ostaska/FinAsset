@@ -1,45 +1,45 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>{% block page_title %} Homepage{%endblock%}</title>
+    <title>{% block page_title %} FinAsset {% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
 </head>
 <body>
 
+{% include "navbar.html" %}
 
-{%include "navbar.html" %}
+{% block contents %}
 
-{%block contents %}
+<div class="container my-5">
+    <h1 class="text-center mb-5">Bem-vindo ao FinAsset</h1>
 
-<br>
-<div class="card text-bg-success mb-3" style="max-width: 18rem;">
-  <div class="card-header">Ativo Info</div>
-  <div class="card-body">
-    <h5 class="card-title">Success</h5>
-    <p class="card-text">Parte do Ativo info finalizada com sucesso.    Ativo --> Informações</p>
-  </div>
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title">Ativo Info</h4>
+                    <p class="card-text">Explore informações detalhadas sobre ativos, incluindo preço, DY, preço teto e descontos.</p>
+                    <a href="{% url 'ativoInfo' %}" class="btn btn-outline-primary">Acessar Ativo Info</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title">Previsão de Preço de Ativos</h4>
+                    <p class="card-text">Descubra as projeções de preços em cenários otimista, normal e pessimista.</p>
+                    <a href="{% url 'projecaoPrecos' %}" class="btn btn-outline-primary">Explorar Previsões</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-
-  <br>
-<div class="card text-bg-info mb-3" style="max-width: 18rem;">
-  <div class="card-header">Previsão de Preço de Ativos</div>
-  <div class="card-body">
-    <h5 class="card-title">Proximo</h5>
-    <p class="card-text">Proximo passo a ser adicionado será essa funcionalidade</p>
-  </div>
-</div>
-
-
-{%endblock%}
-
-
+{% endblock %}
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-{%block scripts%}{%endblock%}
+{% block scripts %}{% endblock %}
 </body>
 </html>

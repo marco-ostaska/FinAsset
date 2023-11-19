@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'baseHTML',
     'ativoInfo',
+    'projecaoPreco',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
