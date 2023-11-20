@@ -6,16 +6,22 @@
     <a class="navbar-brand" href='{% url 'homepage' %}'>Home</a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown ">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Ativo
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="{% url 'ativoInfo' %}">Informações</a></li>
             <li><a class="dropdown-item" href="{% url 'projecaoPrecos' %}">Projeção de Preços Futuros</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown ">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Carteira
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'monteCarlo' %}">Simulação de Monte Carlo</a></li>
+            <li><a class="dropdown-item" href="#">Potencial de Retorno</a></li>
           </ul>
         </li>
       </ul>

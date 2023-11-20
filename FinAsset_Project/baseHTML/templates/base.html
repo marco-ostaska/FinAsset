@@ -15,7 +15,7 @@
     <h1 class="text-center mb-5">Bem-vindo ao FinAsset</h1>
 
     <div class="row g-4">
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h4 class="card-title">Ativo Info</h4>
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h4 class="card-title">Previsão de Preço de Ativos</h4>
@@ -34,8 +34,49 @@
                 </div>
             </div>
         </div>
+                    <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title">Simulação de Monte Carlo</h4>
+                    <p class="card-text">Use simulações de Monte Carlo para avaliar o desempenho de carteiras de investimento em diferentes cenários.</p>
+                    <a href="{% url 'monteCarlo' %}" class="btn btn-outline-primary">Explorar Simulação de Monte Carlo</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title">Encontrar Ativos</h4>
+                    <p class="card-text">Em breve: Ferramenta para encontrar os 10 melhores ativos com potencial de retorno baseado no IDIV, Ibovespa, IFIX, Small Caps ou personalizado.</p>
+                    <!-- <a href="#" class="btn btn-outline-primary">Encontrar Ativos</a> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+<div class="row my-4">
+    <div class="col-12">
+        <h2 class="text-center">Features em Desenvolvimento</h2>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <strong>Encontrar Ativos:</strong> Uma ferramenta para identificar ativos promissores com base em critérios como IDIV, Ibovespa, IFIX, Small Caps ou critérios personalizados.
+            </li>
+            <li class="list-group-item">
+                <strong>Análise Potencial Retorno de Carteira:</strong> Ferramenta de análise para calcular e prever o potencial de retorno de uma carteira de investimentos, considerando a diversificação e riscos.
+            </li>
+            <!-- Adicione mais itens conforme necessário -->
+        </ul>
     </div>
 </div>
+
+
+
+
 
 {% endblock %}
 
