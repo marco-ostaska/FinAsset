@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'ativoInfo',
     'projecaoPreco',
     'monteCarlo',
+    'potencialCarteira',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

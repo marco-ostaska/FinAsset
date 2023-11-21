@@ -1,13 +1,9 @@
-import random
+from custom import bancoCentral
 import yfinance as yf
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
-
 from datetime import datetime
 from tabulate import tabulate
-from custom import bancoCentral
-
 
 class Carteira:
     ANO_DIAS_UTEIS = 252
@@ -77,11 +73,6 @@ class Carteira:
 
         self.peso_ativos.append(pesos)
 
-    def monte_carlo(self, numero_simulacoes):
-        np.random.seed(100)
-        for _ in tqdm(range(numero_simulacoes),desc="Criando Carteiras"):
-            pesos = self.get_pesos(self.numero_ativos)
-            self.calcular_pesos_carteira(pesos)
 
     def df_carteira(self):
 
@@ -94,6 +85,7 @@ class Carteira:
         for contar,a in enumerate(self.data):
             carteira[a + ' Peso'] = round(self.peso_ativos[-1][contar] *100, 2)
 
+
         # vamos transformar nosso dicionário em um dataframe
         df = pd.DataFrame(carteira)
 
@@ -103,36 +95,13 @@ class Carteira:
 
         return df
 
-    def minima_variancia(self):
+    def minha_carteira(self):
         df = self.df_carteira()
         valor = df['Risco'].min()
         carteira = df.loc[df['Risco'] == valor]
         return format_carteira(carteira)
 
-    def maior_sortino_ratio(self):
-        df = self.df_carteira()
-        valor = df['Sortino Ratio'].max()
-        carteira = df.loc[df['Sortino Ratio'] == valor]
-        return format_carteira(carteira)
 
-    def maior_sharpe_ratio(self):
-        df = self.df_carteira()
-        valor = df['Sharpe Ratio'].max()
-        carteira = df.loc[df['Sharpe Ratio'] == valor]
-        return format_carteira(carteira)
-
-    def minima_variancia_ajustada(self):
-        df = self.df_carteira()
-        valor = df['Risco Ajustado'].min()
-        carteira = df.loc[df['Risco Ajustado'] == valor]
-        return format_carteira(carteira)
-
-    def maior_retorno(self):
-        df = self.df_carteira()
-        valor = df['Retorno'].max()
-        carteira =  df.loc[df['Retorno'] == valor]
-        return format_carteira(carteira)
-    
 
 
 def format_carteira(carteira):
@@ -159,9 +128,6 @@ def format_carteira(carteira):
     return resultado
 
 
-
-
-
 def format_values(value, is_percentage):
     return f"{value * 100:.2f}%" if is_percentage else f"{value:.2f}"
 
@@ -179,101 +145,68 @@ def print_carteira(df, titulo):
     print(tabulate(format_dataframe(df), headers=[titulo,"Valores"], tablefmt='simple'))
 
 
-
-
 def get_tickers():
     tickers = input("Entre os tickers separados por virgula: ")
     tickers = [t.upper().strip() for t in tickers.split(",")]
-    random.shuffle(tickers)
     return [f"{t}.SA" for t in tickers]
 
-def is_valid_ticker(ticker):
-    try:
-        ticker_obj = yf.Ticker(ticker)
-        # Verifica se existe algum dado histórico para o ticker
-        return not ticker_obj.history(period="5d").empty
-    except Exception:
-        return False
+def get_pesos():
+    pesos = input("Entre os pesos separados por virgula: ")
+    return np.array([float(p.strip())/100 for p in pesos.split(",")])
 
-
-def try_download_ticker(ticker, start_date):
-    try:
-        ticker_data = yf.download(ticker, start=start_date, progress=False)
-        if 'Adj Close' in ticker_data:
-            return True, ticker_data['Adj Close'].dropna()
-        else:
-            return False, None
-    except Exception as e:
-        return False, None
 
 def download_data(tickers, anos_hist):
     hoje = datetime.now()
-    start_date=f"{hoje.year-anos_hist}-{datetime.now().month}-{datetime.now().day}"
-    data = yf.download(tickers, start=start_date)['Adj Close'].dropna()
-    data = data[tickers]  # Reordenando as colunas com base na lista de tickers
-    return data
+    start_date = f"{hoje.year-anos_hist}-{datetime.now().month}-{datetime.now().day}"
+    df = yf.download(tickers, start=start_date)['Adj Close'].dropna()
+    df = df[tickers]  # Reordenar as colunas de acordo com a ordem dos tickers fornecidos
+    return df
 
 
-def retorna(tickers):
+
+def retorna(tickers,pesos):
     tickers = [t.upper().strip() for t in tickers]
-    random.shuffle(tickers)
     tickers = [f"{t}.SA" for t in tickers]
-    print(tickers)
-    valid_tickers = [ticker for ticker in tickers if is_valid_ticker(ticker)]
-    print(valid_tickers)
-    tickers = valid_tickers
-    print(tickers)
+    pesos = np.array([float(p.strip())/100 for p in pesos])
 
     anos_hist=5
     data=download_data(tickers,anos_hist)
-
     taxa_livre_risco = bancoCentral.taxa_livre_risco(anos_hist)
 
-    carteira = Carteira(data,taxa_livre_risco)
-    carteira.monte_carlo(5000)
+    
 
-    return { 'Menor Risco': carteira.minima_variancia(),
-             'Menor Risco adj': carteira.minima_variancia_ajustada(),
-             'Sharpe': carteira.maior_sharpe_ratio(),
-             'Sortino': carteira.maior_sortino_ratio(),
-             'Maior Retorno': carteira.maior_retorno()
-    }
+    carteira = Carteira(data,taxa_livre_risco)
+    carteira.calcular_pesos_carteira(pesos)
+
+
+    print("Taxa livre de risco do periodo:", taxa_livre_risco, "%")
+
+    print_carteira(carteira.df_carteira(), "Minha carteira")
+
+    return carteira.minha_carteira()
+
 
 def main():
     tickers=get_tickers()
-    valid_tickers = [ticker for ticker in tickers if is_valid_ticker(ticker)]
-    tickers = valid_tickers
-    if len(valid_tickers) < 2:
-        return None
+    pesos=(get_pesos())
     anos_hist=5
     data=download_data(tickers,anos_hist)
-
     taxa_livre_risco = bancoCentral.taxa_livre_risco(anos_hist)
 
+    
 
     carteira = Carteira(data,taxa_livre_risco)
-    carteira.monte_carlo(10000)
+    carteira.calcular_pesos_carteira(pesos)
 
 
-    print("Carteira Recomendadas usando taxa livre de risco de", taxa_livre_risco, "%")
-    print("Menor risco")
-    print(carteira.minima_variancia())
-    print()
-    print("Menor risco (ajustado)")
-    print(carteira.minima_variancia_ajustada())
-    print()
-    print("Maior sharpe ratio")
-    print(carteira.maior_sharpe_ratio())
-    print()
-    print("Maior sortino")
-    print(carteira.maior_sortino_ratio())
-    print()
-    print("Maior retorno")
-    print(carteira.maior_retorno())
-    print()
+    print("Taxa livre de risco do periodo:", taxa_livre_risco, "%")
+
+    print_carteira(carteira.df_carteira(), "Minha carteira")
+
+    print(carteira.minha_carteira())
 
 
-
+    
 
 if __name__ == "__main__":
     main()
