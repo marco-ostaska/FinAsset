@@ -230,7 +230,7 @@ def retorna(tickers):
     taxa_livre_risco = bancoCentral.taxa_livre_risco(anos_hist)
 
     carteira = Carteira(data,taxa_livre_risco)
-    carteira.monte_carlo(10000)
+    carteira.monte_carlo(5000)
 
     return { 'Menor Risco': carteira.minima_variancia(),
              'Menor Risco adj': carteira.minima_variancia_ajustada(),
