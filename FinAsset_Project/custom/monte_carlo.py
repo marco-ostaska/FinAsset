@@ -181,7 +181,7 @@ def retorna(tickers):
 
 
     carteira = Carteira(data,taxa_livre_risco)
-    carteira.monte_carlo(10)
+    carteira.monte_carlo(5000)
 
     print_carteira(carteira.minima_variancia(), "Menor risco")
     print_carteira(carteira.minima_variancia_ajustada(), "Menor risco (ajustado)")
