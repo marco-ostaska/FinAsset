@@ -10,82 +10,68 @@
 {% include "navbar.html" %}
 
 {% block contents %}
-
 <div class="container my-5">
-    <h1 class="text-center mb-5">Bem-vindo ao FinAsset</h1>
+    <h1 class="text-center mb-5">Bem-vindo ao FinAsset: Sua Ferramenta de Análise de Ativos</h1>
 
     <div class="row g-4">
+        <!-- Coluna 1 -->
         <div class="col-lg-4">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h4 class="card-title">Ativo Info</h4>
-                    <p class="card-text">Explore informações detalhadas sobre ativos, incluindo preço, DY, preço teto e descontos.</p>
-                    <a href="{% url 'ativoInfo' %}" class="btn btn-outline-primary">Acessar Ativo Info</a>
+                    <h4 class="card-title">Análise de Ativos</h4>
+                    <p class="card-text">Obtenha informações sobre ativos, incluindo análises de preço, dividend yield e avaliações de valor.</p>
+                    <a href="{% url 'ativoInfo' %}" class="btn btn-primary">Explorar Análise de Ativos</a>
                 </div>
             </div>
         </div>
 
+        <!-- Coluna 2 -->
         <div class="col-lg-4">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h4 class="card-title">Previsão de Preço de Ativos</h4>
-                    <p class="card-text">Descubra as projeções de preços em cenários otimista, normal e pessimista.</p>
-                    <a href="{% url 'projecaoPrecos' %}" class="btn btn-outline-primary">Explorar Previsões</a>
+                    <h4 class="card-title">Projeções de Preço de Ativos</h4>
+                    <p class="card-text">Explore estimativas futuras de preços de ativos com base em cenários variados: otimista, realista e conservador.</p>
+                    <a href="{% url 'projecaoPrecos' %}" class="btn btn-primary">Ver Projeções</a>
                 </div>
             </div>
         </div>
-                    <div class="col-lg-4">
+
+        <!-- Coluna 3 -->
+        <div class="col-lg-4">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h4 class="card-title">Simulação de Monte Carlo</h4>
-                    <p class="card-text">Use simulações de Monte Carlo para avaliar o desempenho de carteiras de investimento em diferentes cenários.</paciência>
-                    <a href="{% url 'monteCarlo' %}" class="btn btn-outline-primary">Explorar Simulação de Monte Carlo</a>
+                    <h4 class="card-title">Simulação de Riscos com Monte Carlo</h4>
+                    <p class="card-text">Avalie o risco e o desempenho potencial de suas carteiras de investimentos utilizando simulações de Monte Carlo.</p>
+                    <a href="{% url 'monteCarlo' %}" class="btn btn-primary">Iniciar Simulação</a>
                 </div>
             </div>
         </div>
     </div>
 
-            <div class="col-lg-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h4 class="card-title">Verifica Potencial de Retorno da Carteira</h4>
-                    <p class="card-text">Avaliar o desempenho de uma carteira de investimento em diferentes cenários.</paciência>
-                    <a href="{% url 'PotencialCarteira' %}" class="btn btn-outline-primary">Explorar Potencial de Retorno da Carteira</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="row g-4">
+        <!-- Coluna 4 -->
         <div class="col-lg-4">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h4 class="card-title">Encontrar Ativos</h4>
-                    <p class="card-text">Em breve: Ferramenta para encontrar os 10 melhores ativos com potencial de retorno baseado no IDIV, Ibovespa, IFIX, Small Caps ou personalizado.</p>
-                    <!-- <a href="#" class="btn btn-outline-primary">Encontrar Ativos</a> -->
+                    <h4 class="card-title">Descoberta de Ativos Promissores</h4>
+                    <p class="card-text">Identifique ativos com alto potencial de retorno com base nos principais indices.</p>
+                    <a href="{% url 'encontrarAtivo' %}" class="btn btn-primary">Buscar Ativos</a>
                 </div>
             </div>
         </div>
-    </div>
 
-
-
-
-<div class="row my-4">
-    <div class="col-12">
-        <h2 class="text-center">Features em Desenvolvimento</h2>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-                <strong>Encontrar Ativos:</strong> Uma ferramenta para identificar ativos promissores com base em critérios como IDIV, Ibovespa, IFIX, Small Caps ou critérios personalizados.
-            </li>
-            <li class="list-group-item">
-                <strong>Análise Potencial Retorno de Carteira:</strong> Ferramenta de análise para calcular e prever o potencial de retorno de uma carteira de investimentos, considerando a diversificação e riscos.
-            </li>
-            <!-- Adicione mais itens conforme necessário -->
-        </ul>
+        <!-- Coluna 5 -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title">Potencial de Retorno da Carteira</h4>
+                    <p class="card-text">Analise o potencial de crescimento da sua carteira em diversos cenários de mercado.</p>
+                    <a href="{% url 'PotencialCarteira' %}" class="btn btn-primary">Avaliar Carteira</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
-
-
 
 
 {% endblock %}
