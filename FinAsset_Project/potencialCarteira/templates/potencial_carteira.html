@@ -80,36 +80,37 @@
 <!------------------------------------------------------------->
 
 {% if carteira %}
-    <div class="container mt-4">
-        <div class="row">
-                <div class="col-md-6 col-lg-4">
-                    <div class="card mb-3">
-                        <div class="card-header text-bg-dark">
-                            <h4 class="card-title">Potencia de retorno</h4>
-                        </div>
-                        <div class="card-body">
-                            {% for metrica, valor in carteira.items %}
-                                {% if metrica == 'Pesos' or metrica == 'Pesos Ordenados' %}
-                                    <br>
-                                    <div><strong>{{ metrica }}:</strong></div>
-                                    <ul>
-                                        {% for acao, peso in valor.items %}
-                                            <li>{{ acao }}: {{ peso }} %</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% else %}
-                                    <div class="d-flex justify-content-between">
-                                        <div><strong>{{ metrica }}:</strong></div>
-                                        <div>{{ valor }}{% if metrica != 'Sharpe Ratio' and metrica != 'Sortino Ratio' %}%{% endif %}</div>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 col-lg-4">
+            <div class="card mb-3">
+                <div class="card-header text-bg-dark">
+                    <h4 class="card-title">Análise da Carteira</h4>
                 </div>
+                <div class="card-body">
+                    <div><strong>Retorno:</strong> {{ carteira.Retorno|floatformat:2     }}%</div>
+                    <div><strong>Risco:</strong> {{ carteira.Risco|floatformat:2 }}%</div>
+                    <div><strong>Risco Ajustado:</strong> {{ carteira.RiscoAjustado|floatformat:2 }}%</div>
+                    <div><strong>Sharpe Ratio:</strong> {{ carteira.Sharpe|floatformat:2 }}</div>
+                    <div><strong>Sortino Ratio:</strong> {{ carteira.Sortino|floatformat:2 }}</div>
+                    <br>
+                    <p><strong>Composição da Carteira:</strong></p>
+                    <ul>
+                        {% for ticker in carteira.Tickers %}
+                            {% for key, value in ticker.items %}
+                                <li>{{ key }}: {{ value|floatformat:2 }}%</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                    {{carteira}}
+                </div>
+            </div>
         </div>
     </div>
+</div>
 {% endif %}
+
+
 
 
 {%endblock%}

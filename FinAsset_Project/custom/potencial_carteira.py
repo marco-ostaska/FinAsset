@@ -83,49 +83,18 @@ class Carteira:
                     'Sortino Ratio': self.sortino_ratio}
 
         for contar,a in enumerate(self.data):
-            carteira[a + ' Peso'] = round(self.peso_ativos[-1][contar] *100, 2)
-
+            carteira[a] = [Peso[contar] for Peso in self.peso_ativos]
 
         # vamos transformar nosso dicionário em um dataframe
         df = pd.DataFrame(carteira)
 
         # vamos nomear as colunas do novo dataframe
-        colunas = ['Retorno', 'Risco', 'Risco Ajustado', 'Sharpe Ratio' , 'Sortino Ratio'] + [a+' Peso' for a in self.data]
+        colunas = ['Retorno', 'Risco', 'Risco Ajustado', 'Sharpe Ratio' , 'Sortino Ratio'] + [a for a in self.data]
         df = df[colunas]
 
-        return df
-
-    def minha_carteira(self):
-        df = self.df_carteira()
-        valor = df['Risco'].min()
-        carteira = df.loc[df['Risco'] == valor]
-        return format_carteira(carteira)
+        return df,[a for a in self.data]
 
 
-
-
-def format_carteira(carteira):
-    # Criar um dicionário para armazenar as informações
-    resultado = {
-        'Retorno': round(carteira['Retorno'].values[0] * 100,2),  # Valor numérico
-        'Risco': round(carteira['Risco'].values[0] * 100,2),  # Valor numérico
-        'Risco Ajustado': round(carteira['Risco Ajustado'].values[0] * 100,2),  # Valor numérico
-        'Sharpe Ratio': round(carteira['Sharpe Ratio'].values[0],2),  # Valor numérico
-        'Sortino Ratio': round(carteira['Sortino Ratio'].values[0],2),  # Valor numérico
-        'Pesos': {}
-    }
-
-    # Adicionar os pesos de cada ação ao subdicionário 'Pesos'
-    for col in carteira.columns:
-        if 'Peso' in col:
-            acao = col.replace(' Peso', '')
-            resultado['Pesos'][acao] = round(carteira[col].values[0],2)  # Valor numérico
-
-    # Ordenar os pesos e adicionar ao subdicionário 'Pesos Ordenados'
-    pesos_ordenados = dict(sorted(resultado['Pesos'].items(), key=lambda item: item[1], reverse=True))
-    resultado['Pesos Ordenados'] = pesos_ordenados
-
-    return resultado
 
 
 def format_values(value, is_percentage):
@@ -140,19 +109,16 @@ def format_dataframe(df):
             formatted_df[col] = formatted_df[col].apply(format_values, args=(True,))
     return formatted_df.T   
 
-def print_carteira(df, titulo):
-    print()
-    print(tabulate(format_dataframe(df), headers=[titulo,"Valores"], tablefmt='simple'))
+def format_carteira(df):
+    return tabulate(format_dataframe(df), tablefmt='simple')
 
 
-def get_tickers():
-    tickers = input("Entre os tickers separados por virgula: ")
-    tickers = [t.upper().strip() for t in tickers.split(",")]
+def get_tickers(tickers):
+    tickers = [t.upper().strip() for t in tickers]
     return [f"{t}.SA" for t in tickers]
 
-def get_pesos():
-    pesos = input("Entre os pesos separados por virgula: ")
-    return np.array([float(p.strip())/100 for p in pesos.split(",")])
+def get_pesos(pesos):
+    return np.array([float(p.strip())/100 for p in pesos])
 
 
 def download_data(tickers, anos_hist):
@@ -164,10 +130,12 @@ def download_data(tickers, anos_hist):
 
 
 
-def retorna(tickers,pesos):
-    tickers = [t.upper().strip() for t in tickers]
-    tickers = [f"{t}.SA" for t in tickers]
-    pesos = np.array([float(p.strip())/100 for p in pesos])
+def retorna(tickers, pesos):
+    tickers=get_tickers(tickers) 
+    pesos=(get_pesos(pesos))
+    print(tickers)
+    print(pesos)
+
 
     anos_hist=5
     data=download_data(tickers,anos_hist)
@@ -177,36 +145,22 @@ def retorna(tickers,pesos):
 
     carteira = Carteira(data,taxa_livre_risco)
     carteira.calcular_pesos_carteira(pesos)
+    df, tt = carteira.df_carteira()
+
+    a = {
+    "Retorno": df["Retorno"].iloc[0] *100,
+    "Risco": df["Risco"].iloc[0] *100,
+    "RiscoAjustado": df["Risco Ajustado"].iloc[0] *100,
+    "Sharpe": df["Sharpe Ratio"].iloc[0],
+    "Sortino": df["Sortino Ratio"].iloc[0],
+    "Tickers": []
+}
+    for t in tt:
+        a["Tickers"].append({t:df[t].iloc[0] *100} )
+
+    return a
+   
+
+   # return format_dataframe(carteira.df_carteira())
 
 
-    print("Taxa livre de risco do periodo:", taxa_livre_risco, "%")
-
-    print_carteira(carteira.df_carteira(), "Minha carteira")
-
-    return carteira.minha_carteira()
-
-
-def main():
-    tickers=get_tickers()
-    pesos=(get_pesos())
-    anos_hist=5
-    data=download_data(tickers,anos_hist)
-    taxa_livre_risco = bancoCentral.taxa_livre_risco(anos_hist)
-
-    
-
-    carteira = Carteira(data,taxa_livre_risco)
-    carteira.calcular_pesos_carteira(pesos)
-
-
-    print("Taxa livre de risco do periodo:", taxa_livre_risco, "%")
-
-    print_carteira(carteira.df_carteira(), "Minha carteira")
-
-    print(carteira.minha_carteira())
-
-
-    
-
-if __name__ == "__main__":
-    main()

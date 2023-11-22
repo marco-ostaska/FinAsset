@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from .forms import Formulario
 from custom import potencial_carteira
+from django.views.decorators.cache import never_cache
 # Create your views here.
 
+
+@never_cache
 def info_form(request):
     if request.method == "POST":
         form = Formulario(request.POST) 
@@ -17,4 +20,6 @@ def info_form(request):
     form = Formulario()
     return render(request, "potencial_carteira.html", {"form": form})
        
-           
+
+
+
