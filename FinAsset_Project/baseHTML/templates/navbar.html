@@ -1,0 +1,33 @@
+{% block navbar %}
+
+<header>
+<nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href='{% url 'homepage' %}'>Home</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown ">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Ativo
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'ativoInfo' %}">Informações</a></li>
+            <li><a class="dropdown-item" href="{% url 'projecaoPrecos' %}">Projeção de Preços Futuros</a></li>
+            <li><a class="dropdown-item" href="{% url 'encontrarAtivo' %}">Encontrar Ativos com Pontecial</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown ">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Carteira
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'monteCarlo' %}">Simulação de Monte Carlo</a></li>
+            <li><a class="dropdown-item" href="{% url 'PotencialCarteira' %}">Potencial de Retorno</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+</header>
+{%endblock%}
