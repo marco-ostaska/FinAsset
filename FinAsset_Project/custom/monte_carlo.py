@@ -1,3 +1,4 @@
+from custom import bancoCentral
 import random
 import yfinance as yf
 import numpy as np
@@ -6,7 +7,6 @@ from tqdm import tqdm
 
 from datetime import datetime
 from tabulate import tabulate
-from custom import bancoCentral
 
 
 class Carteira:
@@ -92,13 +92,13 @@ class Carteira:
                     'Sortino Ratio': self.sortino_ratio}
 
         for contar,a in enumerate(self.data):
-            carteira[a + ' Peso'] = round(self.peso_ativos[-1][contar] *100, 2)
+            carteira[a] = [Peso[contar] for Peso in self.peso_ativos]
 
         # vamos transformar nosso dicionário em um dataframe
         df = pd.DataFrame(carteira)
 
         # vamos nomear as colunas do novo dataframe
-        colunas = ['Retorno', 'Risco', 'Risco Ajustado', 'Sharpe Ratio' , 'Sortino Ratio'] + [a+' Peso' for a in self.data]
+        colunas = ['Retorno', 'Risco', 'Risco Ajustado', 'Sharpe Ratio' , 'Sortino Ratio'] + [a for a in self.data]
         df = df[colunas]
 
         return df
@@ -106,59 +106,27 @@ class Carteira:
     def minima_variancia(self):
         df = self.df_carteira()
         valor = df['Risco'].min()
-        carteira = df.loc[df['Risco'] == valor]
-        return format_carteira(carteira)
+        return df.loc[df['Risco'] == valor]
 
     def maior_sortino_ratio(self):
         df = self.df_carteira()
         valor = df['Sortino Ratio'].max()
-        carteira = df.loc[df['Sortino Ratio'] == valor]
-        return format_carteira(carteira)
+        return df.loc[df['Sortino Ratio'] == valor]
 
     def maior_sharpe_ratio(self):
         df = self.df_carteira()
         valor = df['Sharpe Ratio'].max()
-        carteira = df.loc[df['Sharpe Ratio'] == valor]
-        return format_carteira(carteira)
+        return df.loc[df['Sharpe Ratio'] == valor]
 
     def minima_variancia_ajustada(self):
         df = self.df_carteira()
         valor = df['Risco Ajustado'].min()
-        carteira = df.loc[df['Risco Ajustado'] == valor]
-        return format_carteira(carteira)
+        return df.loc[df['Risco Ajustado'] == valor]
 
     def maior_retorno(self):
         df = self.df_carteira()
         valor = df['Retorno'].max()
-        carteira =  df.loc[df['Retorno'] == valor]
-        return format_carteira(carteira)
-    
-
-
-def format_carteira(carteira):
-    # Criar um dicionário para armazenar as informações
-    resultado = {
-        'Retorno': round(carteira['Retorno'].values[0] * 100,2),  # Valor numérico
-        'Risco': round(carteira['Risco'].values[0] * 100,2),  # Valor numérico
-        'Risco Ajustado': round(carteira['Risco Ajustado'].values[0] * 100,2),  # Valor numérico
-        'Sharpe Ratio': round(carteira['Sharpe Ratio'].values[0],2),  # Valor numérico
-        'Sortino Ratio': round(carteira['Sortino Ratio'].values[0],2),  # Valor numérico
-        'Pesos': {}
-    }
-
-    # Adicionar os pesos de cada ação ao subdicionário 'Pesos'
-    for col in carteira.columns:
-        if 'Peso' in col:
-            acao = col.replace(' Peso', '')
-            resultado['Pesos'][acao] = round(carteira[col].values[0],2)  # Valor numérico
-
-    # Ordenar os pesos e adicionar ao subdicionário 'Pesos Ordenados'
-    pesos_ordenados = dict(sorted(resultado['Pesos'].items(), key=lambda item: item[1], reverse=True))
-    resultado['Pesos Ordenados'] = pesos_ordenados
-
-    return resultado
-
-
+        return df.loc[df['Retorno'] == valor]
 
 
 
@@ -179,32 +147,11 @@ def print_carteira(df, titulo):
     print(tabulate(format_dataframe(df), headers=[titulo,"Valores"], tablefmt='simple'))
 
 
-
-
-def get_tickers():
-    tickers = input("Entre os tickers separados por virgula: ")
-    tickers = [t.upper().strip() for t in tickers.split(",")]
+def get_tickers(tickers):
+    #tickers = input("Entre os tickers separados por virgula: ")
+    tickers = [t.upper().strip() for t in tickers]
     random.shuffle(tickers)
     return [f"{t}.SA" for t in tickers]
-
-def is_valid_ticker(ticker):
-    try:
-        ticker_obj = yf.Ticker(ticker)
-        # Verifica se existe algum dado histórico para o ticker
-        return not ticker_obj.history(period="5d").empty
-    except Exception:
-        return False
-
-
-def try_download_ticker(ticker, start_date):
-    try:
-        ticker_data = yf.download(ticker, start=start_date, progress=False)
-        if 'Adj Close' in ticker_data:
-            return True, ticker_data['Adj Close'].dropna()
-        else:
-            return False, None
-    except Exception as e:
-        return False, None
 
 def download_data(tickers, anos_hist):
     hoje = datetime.now()
@@ -213,38 +160,20 @@ def download_data(tickers, anos_hist):
     data = data[tickers]  # Reordenando as colunas com base na lista de tickers
     return data
 
+def carteira_to_dict(df, titulo):
+    carteira_dict = {
+        "Titulo": titulo,
+        "Retorno": df["Retorno"].iloc[0] * 100,
+        "Risco": df["Risco"].iloc[0] * 100,
+        "RiscoAjustado": df["Risco Ajustado"].iloc[0] * 100,
+        "Sharpe": df["Sharpe Ratio"].iloc[0],
+        "Sortino": df["Sortino Ratio"].iloc[0],
+        "Tickers": {ticker: peso * 100 for ticker, peso in zip(df.columns[5:], df.iloc[0][5:].values)}
+    }
+    return carteira_dict
 
 def retorna(tickers):
-    tickers = [t.upper().strip() for t in tickers]
-    random.shuffle(tickers)
-    tickers = [f"{t}.SA" for t in tickers]
-    print(tickers)
-    valid_tickers = [ticker for ticker in tickers if is_valid_ticker(ticker)]
-    print(valid_tickers)
-    tickers = valid_tickers
-    print(tickers)
-
-    anos_hist=5
-    data=download_data(tickers,anos_hist)
-
-    taxa_livre_risco = bancoCentral.taxa_livre_risco(anos_hist)
-
-    carteira = Carteira(data,taxa_livre_risco)
-    carteira.monte_carlo(5000)
-
-    return { 'Menor Risco': carteira.minima_variancia(),
-             'Menor Risco adj': carteira.minima_variancia_ajustada(),
-             'Sharpe': carteira.maior_sharpe_ratio(),
-             'Sortino': carteira.maior_sortino_ratio(),
-             'Maior Retorno': carteira.maior_retorno()
-    }
-
-def main():
-    tickers=get_tickers()
-    valid_tickers = [ticker for ticker in tickers if is_valid_ticker(ticker)]
-    tickers = valid_tickers
-    if len(valid_tickers) < 2:
-        return None
+    tickers=get_tickers(tickers)
     anos_hist=5
     data=download_data(tickers,anos_hist)
 
@@ -252,28 +181,29 @@ def main():
 
 
     carteira = Carteira(data,taxa_livre_risco)
-    carteira.monte_carlo(10000)
+    carteira.monte_carlo(10)
+
+    print_carteira(carteira.minima_variancia(), "Menor risco")
+    print_carteira(carteira.minima_variancia_ajustada(), "Menor risco (ajustado)")
+    print_carteira(carteira.maior_sharpe_ratio(), "Maior sharpe ratio")
+    print_carteira(carteira.maior_sortino_ratio(), "Maior sortino")
+    print_carteira(carteira.maior_retorno(), "Maior retorno")
+
+    print(carteira_to_dict(carteira.maior_retorno(), "Maior Retorno"))
+
+    print(carteira_to_dict(carteira.maior_retorno(), "Maior Retorno"))
+
+    # print("Carteira Recomendadas usando taxa livre de risco de", taxa_livre_risco, "%")
+
+    return  [carteira_to_dict(carteira.minima_variancia(), "Menor risco"),
+          carteira_to_dict(carteira.minima_variancia_ajustada(), "Menor risco (ajustado)"),
+          carteira_to_dict(carteira.maior_sharpe_ratio(), "Maior sharpe ratio"),
+          carteira_to_dict(carteira.maior_sortino_ratio(), "Maior sortino"),
+          carteira_to_dict(carteira.maior_retorno(), "Maior Retorno")]
 
 
-    print("Carteira Recomendadas usando taxa livre de risco de", taxa_livre_risco, "%")
-    print("Menor risco")
-    print(carteira.minima_variancia())
-    print()
-    print("Menor risco (ajustado)")
-    print(carteira.minima_variancia_ajustada())
-    print()
-    print("Maior sharpe ratio")
-    print(carteira.maior_sharpe_ratio())
-    print()
-    print("Maior sortino")
-    print(carteira.maior_sortino_ratio())
-    print()
-    print("Maior retorno")
-    print(carteira.maior_retorno())
-    print()
 
-
-
+    
 
 if __name__ == "__main__":
     main()

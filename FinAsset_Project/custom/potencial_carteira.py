@@ -142,7 +142,6 @@ def retorna(tickers, pesos):
     taxa_livre_risco = bancoCentral.taxa_livre_risco(anos_hist)
 
     
-
     carteira = Carteira(data,taxa_livre_risco)
     carteira.calcular_pesos_carteira(pesos)
     df, tt = carteira.df_carteira()

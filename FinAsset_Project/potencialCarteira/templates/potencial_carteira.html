@@ -102,6 +102,12 @@
                             {% endfor %}
                         {% endfor %}
                     </ul>
+                        <p><strong>Pesos ordenados:</strong></p>
+                    <ul>
+                    {% for ticker, peso in carteira.SortedTickers %}
+                        <li>{{ ticker }}: {{ peso|floatformat:2 }}%</li>
+                    {% endfor %}
+    </ul>
                 </div>
             </div>
         </div>

@@ -8,6 +8,12 @@ def info_form(request):
         form = Formulario(request.POST) 
         if form.is_valid():
            carteiras = monte_carlo.retorna(form.cleaned_data['ticker'].splitlines())
+           for carteira in carteiras:
+                # Ordenar os tickers com base nos pesos, em ordem decrescente
+                sorted_tickers = sorted(carteira['Tickers'].items(), key=lambda x: x[1], reverse=True)
+                # Substituir o dicionário de tickers pela lista ordenada
+                carteira['SortedTickers'] = sorted_tickers
+
 
            return render(request, "monte_carlo.html", {"form": form, "carteiras": carteiras})
         

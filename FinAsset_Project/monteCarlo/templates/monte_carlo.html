@@ -97,38 +97,44 @@
 <!------------------------------------------------------------->
 <!------------------------------------------------------------->
 
+
 {% if carteiras %}
-    <div class="container mt-4">
-        <div class="row">
-            {% for tipo, detalhes in carteiras.items %}
-                <div class="col-md-6 col-lg-4">
-                    <div class="card mb-3">
-                        <div class="card-header text-bg-dark">
-                            <h4 class="card-title">{{ tipo }}</h4>
-                        </div>
-                        <div class="card-body">
-                            {% for metrica, valor in detalhes.items %}
-                                {% if metrica == 'Pesos' or metrica == 'Pesos Ordenados' %}
-                                    <br>
-                                    <div><strong>{{ metrica }}:</strong></div>
-                                    <ul>
-                                        {% for acao, peso in valor.items %}
-                                            <li>{{ acao }}: {{ peso }} %</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% else %}
-                                    <div class="d-flex justify-content-between">
-                                        <div><strong>{{ metrica }}:</strong></div>
-                                        <div>{{ valor }}{% if metrica != 'Sharpe Ratio' and metrica != 'Sortino Ratio' %}%{% endif %}</div>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
+<div class="container mt-4">
+    <div class="row">
+       {% for carteira in carteiras %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card mb-3">
+                <div class="card-header text-bg-dark">
+                    <h4 class="card-title">{{carteira.Tipo}}</h4>
                 </div>
-            {% endfor %}
+                <div class="card-body">
+                    <div><strong>Retorno:</strong> {{ carteira.Retorno|floatformat:2     }}%</div>
+                    <div><strong>Risco:</strong> {{ carteira.Risco|floatformat:2 }}%</div>
+                    <div><strong>Risco Ajustado:</strong> {{ carteira.RiscoAjustado|floatformat:2 }}%</div>
+                    <div><strong>Sharpe Ratio:</strong> {{ carteira.Sharpe|floatformat:2 }}</div>
+                    <div><strong>Sortino Ratio:</strong> {{ carteira.Sortino|floatformat:2 }}</div>
+                    <br>
+                    <p><strong>Composição da Carteira:</strong></p>
+
+                    <ul>
+                        {% for ticker, peso in carteira.Tickers.items %}
+                            <li>{{ ticker }}: {{ peso|floatformat:2 }}%</li>
+                        {% endfor %}
+                    </ul>
+                    <p><strong>Pesos ordenados:</strong></p>
+
+                    <p><strong>Pesos ordenados:</strong></p>
+                    <ul>
+                        {% for ticker, peso in carteira.SortedTickers %}
+                            <li>{{ ticker }}: {{ peso|floatformat:2 }}%</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </div>
+        {%endfor%}
     </div>
+</div>
 {% endif %}
 
 
