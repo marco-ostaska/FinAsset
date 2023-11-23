@@ -105,7 +105,7 @@
         <div class="col-md-6 col-lg-4">
             <div class="card mb-3">
                 <div class="card-header text-bg-dark">
-                    <h4 class="card-title">{{carteira.Tipo}}</h4>
+                    <h4 class="card-title">{{carteira.Titulo}}</h4>
                 </div>
                 <div class="card-body">
                     <div><strong>Retorno:</strong> {{ carteira.Retorno|floatformat:2     }}%</div>
@@ -121,8 +121,6 @@
                             <li>{{ ticker }}: {{ peso|floatformat:2 }}%</li>
                         {% endfor %}
                     </ul>
-                    <p><strong>Pesos ordenados:</strong></p>
-
                     <p><strong>Pesos ordenados:</strong></p>
                     <ul>
                         {% for ticker, peso in carteira.SortedTickers %}
