@@ -19,23 +19,18 @@
 
         <div class="container">
             <div class="row">
-            {% for choice in form.opt %}
-                <div class="col-auto">   
-                    <div class="form-check">
-                        {{ choice.tag }}
-                        <label class="form-check-label" for="{{ choice.id_for_label }}">
-                            {{ choice.choice_label }}
-                        </label>
+                <div class="col-auto">
+                    <div class="form-group">
+                        <label for="{{ form.opt.id_for_label }}">Escolha uma opção:</label>
+                        {{ form.opt }}
                     </div>
-                    
                 </div>
-                {%endfor%}
-                        
                 <div class="col-auto">
                     <button type="submit" class="btn btn-primary">Processar!</button>
                 </div>
-            </div>              
+            </div>
         </div>
+
     </form>
 
 
@@ -51,14 +46,14 @@
             </div>
         </div>
     </div>
-    
+
 
     <!------------------------------------------------------------->
     <!------------------------------------------------------------->
     {% if results %}
     <br><br><br><br>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-1 border-bottom"></div>
-    <div class="container-xl text-center mb-4"> 
+    <div class="container-xl text-center mb-4">
         <h3>Projeções</h3>
     </div>
 

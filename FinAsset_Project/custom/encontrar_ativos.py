@@ -23,7 +23,7 @@ def print_melhores(retornos):
         if retorno is not None:
             print(f"{ticker}: {retorno:.2f}%")
 
-    
+
     return top_10_retornos
 
     print()
@@ -77,28 +77,15 @@ def get_sel(selecao):
         2: base_dir / "etc" / "idiv.txt",
         3: base_dir / "etc" / "small.txt",
         4: base_dir / "etc" / "ifix.txt",
-        6: base_dir / "etc" / "custom.txt"
+        5: base_dir / "etc" / "setores" / "saneamento.txt",
+        6: base_dir / "etc" / "setores" / "eletricas.txt",
+        7: base_dir / "etc" / "setores" / "bancos.txt",
+        8: base_dir / "etc" / "setores" / "seguros.txt",
+        9: base_dir / "etc" / "setores" / "saude.txt",
     }
 
     print(paths[selecao])
     return paths[selecao]
-
-
-
-def opt():
-    selecao=0
-    while selecao<1 or selecao>6:
-        print("Selecione uma das opções")
-        print("1 - IBOV")
-        print("2 - IDIV")
-        print("3 - Small Caps")
-        print("4 - Ifix")
-        print("5 - Todas")
-        print("6 - Custom (preencher o arquivo custom.txt)")
-        selecao=int(input("opçao desejada: "))
-
-    return get_sel(selecao)
-
 
 def retorna(opt):
 
@@ -109,7 +96,7 @@ def retorna(opt):
 
     lista_ativos = gerar_lista_ativos(ativos,anos_historico)
     ret = {}
-    c = 0 
+    c = 0
     for dp in dias_previsoes:
         c += 1
         print_cabecalho(dp, dias_previsoes)
@@ -133,51 +120,9 @@ def retorna(opt):
             ret[chave] = []
 
         for r in rtrn:
-            ret[chave].append({"ticker": r[0], "pct": r[1]})    
+            ret[chave].append({"ticker": r[0], "pct": r[1]})
 
-    
+
     return ret
-
-
-
-def main():
-    ativos = ler_tickers(opt())
-    anos_historico = 5
-    dias_previsoes = [7, 30, 90, projecaoAtivosLib.dias_ate_final_ano(), 5*365]
-
-    lista_ativos = gerar_lista_ativos(ativos,anos_historico)
-    ret = {}
-    c = 0
-    for dp in dias_previsoes:
-        c += 1
-        print(c)
-        print_cabecalho(dp, dias_previsoes)
-
-        retornos = [
-            (ativo.ticker, calcula_projetado(ativo, dp))
-            for ativo in lista_ativos
-        ]
-        rtrn = print_melhores(retornos)
-
-        chave = ""
-        if c == 4:
-            chave = "Até final do ano"
-        elif c == 5:
-            chave = "para os próximos 5 Anos"
-        else:
-            chave = f"para os próximos {dp} Dias"
-
-        if chave not in ret:
-            ret[chave] = []
-
-        for r in rtrn:
-            ret[chave].append({"ticker": r[0], "pct": r[1]})        
-   
-
-    print(ret)
-
-# Iniciando o programa
-if __name__ == "__main__":
-    main()
 
 
