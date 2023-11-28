@@ -77,11 +77,13 @@ def get_sel(selecao):
         2: base_dir / "etc" / "idiv.txt",
         3: base_dir / "etc" / "small.txt",
         4: base_dir / "etc" / "ifix.txt",
-        5: base_dir / "etc" / "setores" / "saneamento.txt",
-        6: base_dir / "etc" / "setores" / "eletricas.txt",
-        7: base_dir / "etc" / "setores" / "bancos.txt",
-        8: base_dir / "etc" / "setores" / "seguros.txt",
-        9: base_dir / "etc" / "setores" / "saude.txt",
+        5: base_dir / "etc" / "ibrx50.txt",
+        5: base_dir / "etc" / "ibrx100.txt",
+        7: base_dir / "etc" / "setores" / "saneamento.txt",
+        8: base_dir / "etc" / "setores" / "eletricas.txt",
+        9: base_dir / "etc" / "setores" / "bancos.txt",
+        10: base_dir / "etc" / "setores" / "seguros.txt",
+        11: base_dir / "etc" / "setores" / "saude.txt",
     }
 
     print(paths[selecao])

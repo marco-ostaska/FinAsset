@@ -7,11 +7,13 @@ class Info(forms.Form):
             (2, 'IDIV'),
             (3, 'Small Caps'),
             (4, 'IFIX'),
-            (5, 'Saneamento'),
-            (6, 'Eletrica'),
-            (7, 'Bancos'),
-            (8, 'Seguros'),
-            (9, 'Saude'),
+            (5, 'IBRX50'),
+            (6, 'IBRX100'),
+            (7, 'Saneamento'),
+            (8, 'Eletrica'),
+            (9, 'Bancos'),
+            (10, 'Seguros'),
+            (11, 'Saude'),
         ], widget=forms.Select
     )
 
