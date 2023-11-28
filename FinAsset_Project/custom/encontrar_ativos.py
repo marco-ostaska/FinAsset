@@ -78,7 +78,7 @@ def get_sel(selecao):
         3: base_dir / "etc" / "small.txt",
         4: base_dir / "etc" / "ifix.txt",
         5: base_dir / "etc" / "ibrx50.txt",
-        5: base_dir / "etc" / "ibrx100.txt",
+        6: base_dir / "etc" / "ibrx100.txt",
         7: base_dir / "etc" / "setores" / "saneamento.txt",
         8: base_dir / "etc" / "setores" / "eletricas.txt",
         9: base_dir / "etc" / "setores" / "bancos.txt",
