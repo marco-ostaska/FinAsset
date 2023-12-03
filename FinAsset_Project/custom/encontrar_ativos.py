@@ -84,6 +84,7 @@ def get_sel(selecao):
         9: base_dir / "etc" / "setores" / "bancos.txt",
         10: base_dir / "etc" / "setores" / "seguros.txt",
         11: base_dir / "etc" / "setores" / "saude.txt",
+        11: base_dir / "etc" / "valor.txt",
     }
 
     print(paths[selecao])

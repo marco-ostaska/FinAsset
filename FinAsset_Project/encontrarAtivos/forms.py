@@ -14,6 +14,8 @@ class Info(forms.Form):
             (9, 'Bancos'),
             (10, 'Seguros'),
             (11, 'Saude'),
+            (12, 'Carteira Valor'),
+
         ], widget=forms.Select
     )
 
