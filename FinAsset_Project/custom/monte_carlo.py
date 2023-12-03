@@ -1,4 +1,5 @@
 from custom import bancoCentral
+import time
 import random
 import yfinance as yf
 import numpy as np
@@ -11,17 +12,19 @@ from tabulate import tabulate
 
 class Carteira:
     ANO_DIAS_UTEIS = 252
-    retorno = []
-    peso_ativos = []
-    volatilidade = []
-    volatilidade_ajustada = []
-    sharpe_ratio = []
-    sortino_ratio = []
 
     def __init__(self, data, selic):
         self.data = data
         self.numero_ativos = len(data.columns)
         self.selic = selic/100
+
+        # Inicialize as variáveis de instância aqui
+        self.retorno = []
+        self.peso_ativos = []
+        self.volatilidade = []
+        self.volatilidade_ajustada = []
+        self.sharpe_ratio = []
+        self.sortino_ratio = []
 
     def retorno_diario(self):
         return self.data.pct_change().dropna()
@@ -42,6 +45,7 @@ class Carteira:
         return  cov_diaria_neg * self.ANO_DIAS_UTEIS
 
     def get_pesos(self, numero_ativos):
+        np.random.seed(int(time.time()) % 1000)
         pesos = np.random.random(numero_ativos)
         pesos /= np.sum(pesos)
         return pesos
@@ -202,8 +206,31 @@ def retorna(tickers):
           carteira_to_dict(carteira.maior_retorno(), "Maior Retorno")]
 
 
+def process_tickers(tickers, threshold):
+    tickers=get_tickers(tickers)
+    anos_hist=5
+    data=download_data(tickers,anos_hist)
 
+    taxa_livre_risco = bancoCentral.taxa_livre_risco(anos_hist)
+
+
+    carteira = Carteira(data,taxa_livre_risco)
+    carteira.monte_carlo(10000)
+    car = carteira_to_dict(carteira.maior_sharpe_ratio(), "Maior sharpe ratio")
+
+    print("Indices:", car["Retorno"], car["Sharpe"], car["Sortino"])
+
+    if car["Retorno"] > threshold and car["Sharpe"] >=1 and threshold and car["Sortino"] >=1:
+        return car 
     
+    return None
+
+def main():
+
+    fii = ["hsml1", "xpml11"]
+
+    print(process_tickers(fii, 0))
+
 
 if __name__ == "__main__":
     main()
