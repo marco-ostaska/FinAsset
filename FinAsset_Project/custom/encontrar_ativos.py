@@ -71,7 +71,7 @@ def get_sel(selecao):
     selecao = int(selecao)
     print("achando arquivo correspondente para:", selecao)
     base_dir = Path(__file__).resolve().parent
-    print("basedir",base_dir )
+    
     paths = {
         1: base_dir / "etc" / "ibov.txt",
         2: base_dir / "etc" / "idiv.txt",
@@ -86,6 +86,8 @@ def get_sel(selecao):
         11: base_dir / "etc" / "setores" / "saude.txt",
         11: base_dir / "etc" / "valor.txt",
     }
+
+    print("basedir",base_dir, paths[selecao] )
 
     print(paths[selecao])
     return paths[selecao]
