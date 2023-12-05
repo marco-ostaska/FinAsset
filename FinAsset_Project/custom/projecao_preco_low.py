@@ -4,7 +4,7 @@ from custom import projecaoAtivosLib
 
 
 def forecast(ativo):
-    dias_projecao = 1
+    dias_projecao = 3
 
     forecast = ativo.forecast(dias_projecao, 10)
 
