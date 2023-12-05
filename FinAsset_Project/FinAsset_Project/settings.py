@@ -40,18 +40,19 @@ ALLOWED_HOSTS = hosts.split(',') if hosts else ['localhost']
 # Application definition
 
 INSTALLED_APPS = [
-    'baseHTML',
-    'ativoInfo',
-    'projecaoPreco',
-    'monteCarlo',
-    'potencialCarteira',
-    'encontrarAtivos',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'baseHTML',
+    'ativoInfo',
+    'projecaoPreco',
+    'monteCarlo',
+    'potencialCarteira',
+    'encontrarAtivos',
+    'projecaoLow',
 ]
 
 MIDDLEWARE = [

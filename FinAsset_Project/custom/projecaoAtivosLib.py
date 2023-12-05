@@ -5,20 +5,21 @@ from scipy.stats import norm
 from datetime import datetime
 
 class Ativo:
-    def __init__(self, ticker, anos_historico):
+    def __init__(self, ticker, anos_historico, stock_data="Adj Close"):
         self.ticker = ticker
+        self.stock_data = stock_data
         self.anos_historico = anos_historico
         self.historico = self.download_data()
         self._log_returns = self.log_returns()
 
     def add_SA(self, ticker):
-        return [t.upper() + ".SA" for t in ticker]
+        return [f"{t.upper()}.SA" for t in ticker]
 
     def download_data(self):
         ticker = self.add_SA([self.ticker])
         today = datetime.now()
         start = f"{today.year-self.anos_historico}-{today.month}-{today.day}"
-        return yf.download(ticker, start=start, progress=False)['Adj Close']
+        return yf.download(ticker, start=start, progress=False)[self.stock_data]
 
     def log_returns(self):
         return np.log(1+self.historico.pct_change(1)).dropna()

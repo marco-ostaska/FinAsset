@@ -15,7 +15,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-auto">   
+            <div class="col-auto">
                 {% for choice in form.opt %}
                 <div class="form-check">
                     {{ choice.tag }}
@@ -25,8 +25,8 @@
                 </div>
                 {% endfor %}
             </div>
-                    
-            <div class="col-auto">   
+
+            <div class="col-auto">
                 <div class="input-group mb-3">
                     <span class="input-group-text">Tickers</span>
                     {{ form.ticker }}
@@ -35,7 +35,7 @@
             <div class="col-auto">
                 <button type="submit" class="btn btn-primary">Processar!</button>
             </div>
-        </div>              
+        </div>
     </div>
 </form>
 
@@ -59,27 +59,25 @@
         </div>
     </div>
 </div>
-   
+
 
 <!------------------------------------------------------------->
 <!------------------------------------------------------------->
 {% if results %}
 <br><br><br><br>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-1 border-bottom"></div>
-<div class="container-xl text-center mb-4"> 
+<div class="container-xl text-center mb-4">
     <h3>Info</h3>
 </div>
-
-
 
 <div class="container">
     <div class="row">
         {%for i in results %}
-        
+
         <div class="col-md-3 mb-3">
             <div class="card text-bg-light h-100 shadow rounded">
                 <div class="card-header text-bg-dark">{{ i.ticker }}</div>
-                <div class="card-body">
+                <div class="card-body text-center">
                   {% for j in i.df%}
                   <div class="container-lg">
                     <div class="row">
@@ -101,11 +99,11 @@
 
 <br><br><br><br>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-1 border-bottom"></div>
-<div class="container mb-4"> 
+<div class="container mb-4">
     <h3>Ordenados Por "Desconto"</h3>
 </div>
 
-<div class="container"> 
+<div class="container">
     <div class="row">
         <div class="col">
             <div class="table-responsive">

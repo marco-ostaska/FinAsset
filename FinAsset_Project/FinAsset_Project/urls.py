@@ -22,8 +22,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('ativo/', include("ativoInfo.urls")),
     path('ativo/', include("projecaoPreco.urls")),
+    path('ativo/', include("projecaoLow.urls")),
     path('carteira/', include("monteCarlo.urls")),
     path('carteira/', include("potencialCarteira.urls")),
-    path('ativo/', include("encontrarAtivos.urls"))
+    path('ativo/', include("encontrarAtivos.urls")),
 
 ]
+
